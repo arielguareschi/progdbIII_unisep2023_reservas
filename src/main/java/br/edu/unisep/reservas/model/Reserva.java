@@ -1,49 +1,46 @@
 package br.edu.unisep.reservas.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
-import java.util.Set;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "reserva")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@EntityListeners(AuditingEntityListener.class)
-public class User {
+public class Reserva {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "primeiro_nome", nullable = false, length = 75)
-    private String nome;
-    @Column(name = "sobrenome", nullable = false, length = 75)
-    private String sobrenome;
-    @Column(name = "email", nullable = false, length = 150, unique = true)
-    private String email;
 
-    @Column(name = "username")
-    private String username;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "data_reserva")
+    private Date dataReserva;
 
-    @Column(name = "senha", nullable = false, length = 100)
-    private String senha;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "data_devolucao")
+    private Date dataDevolucao;
 
-    @OneToMany(mappedBy = "usuario",
-            targetEntity = Reserva.class,
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Reserva> reservas;
+    @ManyToOne
+    @JoinColumn(name = "equipamento")
+    private Equipamento equipamento;
+
+    @Column(name = "status")
+    private int status;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario")
+    private User usuario;
 
     @Column(name = "criado_em", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -56,6 +53,7 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date alteradoEm;
+
     @Column(name = "alterado_por")
     @LastModifiedBy
     private String alteradoPor;

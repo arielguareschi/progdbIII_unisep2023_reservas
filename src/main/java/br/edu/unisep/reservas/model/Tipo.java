@@ -7,43 +7,33 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "tipo")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@EntityListeners(AuditingEntityListener.class)
-public class User {
+public class Tipo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "primeiro_nome", nullable = false, length = 75)
-    private String nome;
-    @Column(name = "sobrenome", nullable = false, length = 75)
-    private String sobrenome;
-    @Column(name = "email", nullable = false, length = 150, unique = true)
-    private String email;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "descricao")
+    private String descricao;
 
-    @Column(name = "senha", nullable = false, length = 100)
-    private String senha;
-
-    @OneToMany(mappedBy = "usuario",
-            targetEntity = Reserva.class,
+    @OneToMany(mappedBy = "tipo",
+            targetEntity = Equipamento.class,
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Reserva> reservas;
+    private Set<Equipamento> equipamentos;
+
 
     @Column(name = "criado_em", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
