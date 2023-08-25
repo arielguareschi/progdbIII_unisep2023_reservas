@@ -2,7 +2,9 @@ package br.edu.unisep.reservas.service;
 
 import br.edu.unisep.reservas.model.User;
 import br.edu.unisep.reservas.repository.UserRepository;
+import jakarta.persistence.Column;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -32,8 +35,19 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     public User save(User user){
         User novo = new User();
+        novo.setNome(user.getNome());
+        novo.setSobrenome(user.getSobrenome());
         novo.setEmail(user.getEmail());
+        novo.setUsername(user.getUsername());
         novo.setSenha(bcryptEncoder.encode(user.getSenha()));
+        novo.setCriadoEm(new Date());
+        novo.setCriadoPor(user.getNome());
+        novo.setAlteradoEm(new Date());
+        novo.setAlteradoPor(user.getNome());
+
+
+
+
         return repository.save(novo);
     }
 }
